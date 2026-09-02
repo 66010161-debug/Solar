@@ -54,6 +54,15 @@ app.use('/imagemap4', (req, res) => {
     });
 });
 
+app.use('/imagemap5', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'line6.png'), (err) => {
+        if (err) {
+            console.error('❌ หาไฟล์ line6.png ไม่เจอ:', err.message);
+            res.status(404).send('Image not found');
+        }
+    });
+});
+
 // Webhook รองรับคำขอจาก LINE
 app.post('/webhook', line.middleware(config), (req, res) => {
     Promise
@@ -167,6 +176,24 @@ function handleEvents(event) {
             ]
         });
     }    
+
+    else if (text === 'Promotion ของ Solar') {
+        console.log('[LOG] 🚀 เจอคำว่า "Promotion ของ Solar" -> ส่ง Imagemap รูปที่ 5');
+        return client.replyMessage({
+            replyToken: event.replyToken,
+            messages: [
+                {
+                    "type": "imagemap",
+                    "baseUrl": `${BASE_URL}/imagemap5?v=1`,
+                    "altText": "เมนูที่ 5",
+                    "baseSize": { "width": 1040, "height": 1291 },
+                    "actions": [ ]
+                        
+                }
+            ]
+        });
+    }
+
     // --------------------------------------------------------
     // ⛔ พิมพ์คำอื่น -> ไม่ตอบกลับ
     // --------------------------------------------------------
