@@ -45,6 +45,15 @@ app.use('/imagemap3', (req, res) => {
     });
 });
 
+app.use('/imagemap4', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'line5.png'), (err) => {
+        if (err) {
+            console.error('❌ หาไฟล์ line5.png ไม่เจอ:', err.message);
+            res.status(404).send('Image not found');
+        }
+    });
+});
+
 // Webhook รองรับคำขอจาก LINE
 app.post('/webhook', line.middleware(config), (req, res) => {
     Promise
@@ -140,6 +149,24 @@ function handleEvents(event) {
         });
     }
 
+    else if (text === 'ปรึกษาเจ้าหน้าที่') {
+        console.log('[LOG] 🚀 เจอคำว่า "ปรึกษาเจ้าหน้าที่" -> ส่ง Imagemap รูปที่ 4');
+        return client.replyMessage({
+            replyToken: event.replyToken,
+            messages: [
+                {
+                    "type": "imagemap",
+                    "baseUrl": `${BASE_URL}/imagemap4?v=1`,
+                    "altText": "เมนูที่ 4",
+                    "baseSize": { "width": 1040, "height": 1291 },
+                    "actions": [
+                        { "type": "message", "area": { "x": 271, "y": 1297, "width": 499, "height": 85 }, "text": "099-999-9999" },
+                        { "type": "message", "area": { "x": 479, "y": 1407, "width": 89, "height": 57 }, "text": "Line id : poom260748" }
+                    ]
+                }
+            ]
+        });
+    }    
     // --------------------------------------------------------
     // ⛔ พิมพ์คำอื่น -> ไม่ตอบกลับ
     // --------------------------------------------------------
