@@ -158,10 +158,10 @@ function handleEvents(event) {
                     "type": "imagemap",
                     "baseUrl": `${BASE_URL}/imagemap4?v=1`,
                     "altText": "เมนูที่ 4",
-                    "baseSize": { "width": 700, "height": 1044 },
+                    "baseSize": { "width": 1040, "height": 1551 },
                     "actions": [
-                        { "type": "uri", "area": { "x": 183, "y": 878, "width": 339, "height": 49 }, "linkUri": "tel:0928760920" },
-                        { "type": "uri", "area": { "x": 323, "y": 947, "width": 55, "height": 38 }, "linkUri": "https://line.me/ti/p/@poom260748" }
+                        { "type": "uri", "area": { "x": 273, "y": 1307, "width": 439, "height": 66 }, "linkUri": "tel:0928760920" },
+                        { "type": "uri", "area": { "x": 484, "y": 1401, "width": 78, "height": 63 }, "linkUri": "https://line.me/ti/p/@poom260748" }
                     ]
                 }
             ]
