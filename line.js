@@ -161,7 +161,7 @@ function handleEvents(event) {
                     "baseSize": { "width": 1040, "height": 1551 },
                     "actions": [
                         { "type": "uri", "area": { "x": 273, "y": 1307, "width": 439, "height": 66 }, "linkUri": "tel:0928760920" },
-                        { "type": "uri", "area": { "x": 484, "y": 1401, "width": 78, "height": 63 }, "linkUri": "https://line.me[poom260748]" }
+                        { "type": "uri", "area": { "x": 484, "y": 1401, "width": 78, "height": 63 }, "linkUri": "https://line.me/ti/p/lf1-afmLyQ" }
                     ]
                 }
             ]
