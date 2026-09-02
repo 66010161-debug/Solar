@@ -36,6 +36,15 @@ app.use('/imagemap2', (req, res) => {
     });
 });
 
+app.use('/imagemap3', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'line4.png'), (err) => {
+        if (err) {
+            console.error('❌ หาไฟล์ line4.png ไม่เจอ:', err.message);
+            res.status(404).send('Image not found');
+        }
+    });
+});
+
 // Webhook รองรับคำขอจาก LINE
 app.post('/webhook', line.middleware(config), (req, res) => {
     Promise
@@ -104,6 +113,27 @@ function handleEvents(event) {
                         { "type": "uri", "area": { "x": 82, "y": 435, "width": 876, "height": 235 }, "linkUri": "https://www.facebook.com/share/v/1CAXmR3obs/" },
                         { "type": "uri", "area": { "x": 78, "y": 701, "width": 885, "height": 235 }, "linkUri": "https://eversun.co.th/content/why-solar-produces-less-than-expected/" },
                         { "type": "message", "area": { "x": 78, "y": 962, "width": 883, "height": 238 }, "text": "กดที่ปรึกษาเจ้าหน้าที่" }
+                    ]
+                }
+            ]
+        });
+    }
+
+    else if (text === 'แจ้งซ่อม') {
+        console.log('[LOG] 🚀 เจอคำว่า "แจ้งซ่อม" -> ส่ง Imagemap รูปที่ 3');
+        return client.replyMessage({
+            replyToken: event.replyToken,
+            messages: [
+                {
+                    "type": "imagemap",
+                    "baseUrl": `${BASE_URL}/imagemap3?v=1`,
+                    "altText": "เมนูที่ 3",
+                    "baseSize": { "width": 1040, "height": 1291 },
+                    "actions": [
+                        { "type": "message", "area": { "x": 74, "y": 160, "width": 889, "height": 248 }, "text": "ซ่อม/เปลี่ยนแผงโซลาร์" },
+                        { "type": "message", "area": { "x": 80, "y": 436, "width": 881, "height": 238 }, "text": "ซ่อมรอยรั่วซึมหลังคา" },
+                        { "type": "message", "area": { "x": 82, "y": 697, "width": 879, "height": 243 }, "text": "ล้างแผง/เช็คสภาพแผง" },
+                        { "type": "message", "area": { "x": 82, "y": 963, "width": 881, "height": 239 }, "text": "กดที่ปรึกษาเจ้าหน้าที่" }
                     ]
                 }
             ]
