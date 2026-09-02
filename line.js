@@ -158,10 +158,10 @@ function handleEvents(event) {
                     "type": "imagemap",
                     "baseUrl": `${BASE_URL}/imagemap4?v=1`,
                     "altText": "เมนูที่ 4",
-                    "baseSize": { "width": 1040, "height": 1551 },
+                    "baseSize": { "width": 700, "height": 1044 },
                     "actions": [
-                        { "type": "message", "area": { "x": 271, "y": 1297, "width": 499, "height": 85 }, "text": "099-999-9999" },
-                        { "type": "message", "area": { "x": 479, "y": 1407, "width": 89, "height": 57 }, "text": "Line id : poom260748" }
+                        { "type": "uri", "area": { "x": 183, "y": 878, "width": 339, "height": 49 }, "linkUri": "tel:0928760920" },
+                        { "type": "uri", "area": { "x": 323, "y": 947, "width": 55, "height": 38 }, "linkUri": "https://line.me/ti/p/@poom260748" }
                     ]
                 }
             ]
