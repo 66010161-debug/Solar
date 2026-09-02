@@ -158,7 +158,7 @@ function handleEvents(event) {
                     "type": "imagemap",
                     "baseUrl": `${BASE_URL}/imagemap4?v=1`,
                     "altText": "เมนูที่ 4",
-                    "baseSize": { "width": 1040, "height": 1291 },
+                    "baseSize": { "width": 1040, "height": 1551 },
                     "actions": [
                         { "type": "message", "area": { "x": 271, "y": 1297, "width": 499, "height": 85 }, "text": "099-999-9999" },
                         { "type": "message", "area": { "x": 479, "y": 1407, "width": 89, "height": 57 }, "text": "Line id : poom260748" }
