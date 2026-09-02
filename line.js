@@ -4,17 +4,20 @@ const path = require('path');
 
 const app = express();
 
+// ดึงค่า Config จาก Environment Variables บน Cloud หรือใช้ค่าสำรอง
 const config = {
-    channelAccessToken: '9ZvIyvQIuiFnpR8MX7HlyO5tFahUu25CB+PKvKZQR66xtUlsrHdyHdB6eDbxoQLztsJ2mSKLJuKyzRp2yzbJROlLtY73R+YvRk3yRnTf+Nbp3ry0B4P7QqjTz6J6Z5LF+X/FG1zyZHPonBRRH6K5rAdB04t89/1O/w1cDnyilFU=',
-    channelSecret: 'd0bded7d9530dfba2e9cda97afd06ac1'
+    channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN || '9ZvIyvQIuiFnpR8MX7HlyO5tFahUu25CB+PKvKZQR66xtUlsrHdyHdB6eDbxoQLztsJ2mSKLJuKyzRp2yzbJROlLtY73R+YvRk3yRnTf+Nbp3ry0B4P7QqjTz6J6Z5LF+X/FG1zyZHPonBRRH6K5rAdB04t89/1O/w1cDnyilFU=',
+    channelSecret: process.env.CHANNEL_SECRET || 'd0bded7d9530dfba2e9cda97afd06ac1'
 };
 
 const client = new line.messagingApi.MessagingApiClient({
     channelAccessToken: config.channelAccessToken
 });
 
-// Route ส่งรูปภาพ
-// 🖼️ รูปที่ 1 (line2.png) -> สำหรับคีย์เวิร์ด "ว่าไง"
+// เปิดให้ระบบเรียกใช้ไฟล์รูปภาพในโฟลเดอร์ public ได้โดยตรง
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Route สำหรับส่งรูปภาพ Imagemap
 app.use('/imagemap1', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'line2.png'), (err) => {
         if (err) {
@@ -24,7 +27,6 @@ app.use('/imagemap1', (req, res) => {
     });
 });
 
-// 🖼️ รูปที่ 2 (line3.png) -> สำหรับคีย์เวิร์ดใหม่ (เช่น "ปัญหาที่พบได้บ่อย")
 app.use('/imagemap2', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'line3.png'), (err) => {
         if (err) {
@@ -34,6 +36,7 @@ app.use('/imagemap2', (req, res) => {
     });
 });
 
+// Webhook รองรับคำขอจาก LINE
 app.post('/webhook', line.middleware(config), (req, res) => {
     Promise
         .all(req.body.events.map(handleEvents))
@@ -56,7 +59,8 @@ function handleEvents(event) {
     const text = event.message.text.trim();
     console.log(`[LOG] ข้อความที่เข้ามา: "${text}"`);
 
-    const NGROK_URL = 'https://snagged-strict-diaper.ngrok-free.dev';
+    // ดึง URL หลักจาก Environment Variable บน Render (หากไม่มีจะใช้ URL ของโปรเจกต์คุณ)
+    const BASE_URL = process.env.SERVER_URL || 'https://my-linebot-app-suyh.onrender.com';
 
     // --------------------------------------------------------
     // 🔹 คีย์เวิร์ดที่ 1: "ช่องทางติดตาม" -> ส่งรูปที่ 1 (line2.png)
@@ -68,7 +72,7 @@ function handleEvents(event) {
             messages: [
                 {
                     "type": "imagemap",
-                    "baseUrl": `${NGROK_URL}/imagemap1?v=1`, // 👈 ชี้ไปที่ /imagemap1
+                    "baseUrl": `${BASE_URL}/imagemap1?v=1`,
                     "altText": "ช่องทางติดตาม",
                     "baseSize": { "width": 1040, "height": 1040 },
                     "actions": [
@@ -83,20 +87,19 @@ function handleEvents(event) {
     }
 
     // --------------------------------------------------------
-    // 🔹 คีย์เวิร์ดที่ 2: เปลี่ยนเป็นคำที่ต้องการ -> ส่งรูปที่ 2 (line3.png)
+    // 🔹 คีย์เวิร์ดที่ 2: "ปัญหาที่พบได้บ่อย" -> ส่งรูปที่ 2 (line3.png)
     // --------------------------------------------------------
-    else if (text === 'ปัญหาที่พบได้บ่อย') { // 👈 เปลี่ยนคำว่า 'ปัญหาที่พบได้บ่อย' เป็นคีย์เวิร์ดที่ 2 ของคุณ
+    else if (text === 'ปัญหาที่พบได้บ่อย') {
         console.log('[LOG] 🚀 เจอคำว่า "ปัญหาที่พบได้บ่อย" -> ส่ง Imagemap รูปที่ 2');
         return client.replyMessage({
             replyToken: event.replyToken,
             messages: [
                 {
                     "type": "imagemap",
-                    "baseUrl": `${NGROK_URL}/imagemap2?v=1`, // 👈 ชี้ไปที่ /imagemap2
+                    "baseUrl": `${BASE_URL}/imagemap2?v=1`,
                     "altText": "เมนูที่ 2",
                     "baseSize": { "width": 1040, "height": 1291 },
                     "actions": [
-                        // 👈 ปรับตำแหน่งปุ่ม (x, y, width, height) และลิงก์ตามรูปภาพที่ 2
                         { "type": "uri", "area": { "x": 78, "y": 156, "width": 883, "height": 252 }, "linkUri": "https://www.facebook.com/reel/1686468745968609" },
                         { "type": "uri", "area": { "x": 82, "y": 435, "width": 876, "height": 235 }, "linkUri": "https://www.facebook.com/share/v/1CAXmR3obs/" },
                         { "type": "uri", "area": { "x": 78, "y": 701, "width": 885, "height": 235 }, "linkUri": "https://eversun.co.th/content/why-solar-produces-less-than-expected/" },
@@ -116,6 +119,8 @@ function handleEvents(event) {
     }
 }
 
-app.get('/', (req, res) => res.send('Server is running'));
+app.get('/', (req, res) => res.send('Server is running 24/7'));
 
-app.listen(8888, () => console.log('Server started on port 8888'));
+// ใช้ Dynamic Port สำหรับ Render / Cloud (แก้ปัญหา deploy แล้วค้าง)
+const PORT = process.env.PORT || 8888;
+app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
