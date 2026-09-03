@@ -105,7 +105,7 @@ function handleEvents(event) {
                     "actions": [
                         { "type": "uri", "area": { "x": 131, "y": 131, "width": 190, "height": 195 }, "linkUri": "https://www.facebook.com/onnexenergy?locale=th_TH" },
                         { "type": "uri", "area": { "x": 718, "y": 135, "width": 192, "height": 188 }, "linkUri": "https://www.linkedin.com/in/onnex-by-scg-energy-services-and-consulting/" },
-                        { "type": "uri", "area": { "x": 122, "y": 714, "width": 208, "height": 203 }, "linkUri": "https://www.tiktok.com/@onnexbyscg" },
+                        { "type": "uri", "area": { "x": 122, "y": 714, "width": 208, "height": 203 }, "linkUri": "https://www.tiktok.com/@onnexenergy?is_from_webapp=1&sender_device=pc" },
                         { "type": "uri", "area": { "x": 717, "y": 713, "width": 199, "height": 202 }, "linkUri": "https://www.onnexbyscg.com/" }
                     ]
                 }
